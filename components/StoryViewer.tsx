@@ -148,20 +148,22 @@ export default function StoryViewer({ data, nextVolume }: StoryViewerProps) {
         <div className="min-h-screen bg-[#fdf6e3] flex flex-col items-center py-8 px-4 font-sans text-gray-800">
             {/* Header */}
             <header className="w-full max-w-4xl flex justify-between items-center mb-8">
-                <h1 className="text-xl font-bold text-amber-900 flex items-center gap-2">
-                    <BookOpen className="w-6 h-6" />
-                    {(() => {
-                        const match = data.title.match(/^(.*?)(\s\d+권)$/);
-                        if (match) {
-                            return (
-                                <span>
-                                    {match[1]}
-                                    <span className="ml-4 text-base font-medium text-amber-900/60">{match[2]}</span>
-                                </span>
-                            );
-                        }
-                        return data.title;
-                    })()}
+                <h1 className="text-xl font-bold text-amber-900">
+                    <a href="/" className="flex items-center gap-2 hover:text-amber-700 transition-colors">
+                        <BookOpen className="w-6 h-6" />
+                        {(() => {
+                            const match = data.title.match(/^(.*?)(\s\d+권)$/);
+                            if (match) {
+                                return (
+                                    <span>
+                                        {match[1]}
+                                        <span className="ml-4 text-base font-medium text-amber-900/60">{match[2]}</span>
+                                    </span>
+                                );
+                            }
+                            return data.title;
+                        })()}
+                    </a>
                 </h1>
                 <div className="text-sm font-medium text-amber-800/60">
                     Page {currentIndex + 1} / {data.scenes.length}
