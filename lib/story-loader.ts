@@ -63,21 +63,25 @@ function extractScenes(content: string, filename: string = ''): Scene[] {
 
         // 1. Series Cover (Page 1)
         if (title.includes('시리즈 표지') || title.includes('Series Cover')) {
-            p = '/images/series_cover.png';
+            p = '/images/series_cover';
         }
         // 2. Series TOC (Page 2) - Explicitly empty or specific placeholder
         else if (title.includes('시리즈 목차') || title.includes('Series Index')) {
             imagePath = undefined;
         }
-        // 3. Volume Logic (Cover, Back Cover, Scenes)
+        // 3. Series Motif / Back (Final Page)
+        else if (title.includes('작가의 모티브') || title.includes('Series Motif')) {
+            p = '/images/series_back';
+        }
+        // 4. Volume Logic (Cover, Back Cover, Scenes)
         else {
             const volMatch = filename.match(/vol(\d+)\.md$/) || filename.match(/vo(\d+)\.md$/);
             const volume = volMatch ? volMatch[1] : '1';
 
             if (title.includes('뒷표지') || title.includes('Back')) {
-                p = `/images/vol${volume}/cover_back.png`;
+                p = `/images/vol${volume}/cover_back`;
             } else if (title.includes('표지') || title.includes('Cover')) { // Front Cover of Volume
-                p = `/images/vol${volume}/cover_front.png`;
+                p = `/images/vol${volume}/cover_front`;
             } else {
                 // Scene Number Parsing
                 const pageMatch = rawTitle.match(/\((\d+)/);
@@ -86,14 +90,21 @@ function extractScenes(content: string, filename: string = ''): Scene[] {
                     // Standardize to even numbers (Start of Spread)
                     if (pageNumInt % 2 !== 0) pageNumInt -= 1;
                     const pageNum = pageNumInt.toString().padStart(3, '0');
-                    p = `/images/vol${volume}/${pageNum}.png`;
+                    p = `/images/vol${volume}/${pageNum}`;
                 }
             }
         }
 
-        // Validate if image file exists
-        if (p && fs.existsSync(path.join(process.cwd(), 'public', p))) {
-            imagePath = p;
+        // Validate if image file exists (checking png, jpg, jpeg)
+        if (p) {
+            const extensions = ['.png', '.jpg', '.jpeg'];
+            for (const ext of extensions) {
+                const fullPath = path.join(process.cwd(), 'public', p + ext);
+                if (fs.existsSync(fullPath)) {
+                    imagePath = p + ext;
+                    break;
+                }
+            }
         }
 
         const scene: Scene = {
