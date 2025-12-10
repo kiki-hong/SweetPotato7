@@ -8,9 +8,13 @@ import { useEffect, useCallback } from 'react';
 
 interface StoryViewerProps {
     data: StoryData;
+    nextVolume?: {
+        id: string;
+        title: string;
+    } | null;
 }
 
-export default function StoryViewer({ data }: StoryViewerProps) {
+export default function StoryViewer({ data, nextVolume }: StoryViewerProps) {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isPromptOpen, setIsPromptOpen] = useState(false);
     const [showKoreanPrompt, setShowKoreanPrompt] = useState(false);
@@ -314,6 +318,22 @@ export default function StoryViewer({ data }: StoryViewerProps) {
                                         return currentScene.text;
                                     })()}
                                 </div>
+
+                                {/* Next Volume Button on Last Page */}
+                                {currentIndex === data.scenes.length - 1 && nextVolume && (
+                                    <div className="mt-12 pt-8 border-t border-amber-100 flex justify-center">
+                                        <a
+                                            href={`/vol/${nextVolume.id}`}
+                                            className="flex items-center gap-3 px-8 py-4 bg-amber-600 hover:bg-amber-700 text-white rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:scale-105 group"
+                                        >
+                                            <div className="text-left">
+                                                <div className="text-sm text-amber-100 mb-1">다음 이야기</div>
+                                                <div className="text-xl font-bold">{nextVolume.title}</div>
+                                            </div>
+                                            <ChevronRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
+                                        </a>
+                                    </div>
+                                )}
                             </motion.div>
                         </AnimatePresence>
                     </div>

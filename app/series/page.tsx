@@ -7,7 +7,10 @@ export default async function SeriesPage() {
     if (data.type === 'series') {
         return (
             <div className="min-h-screen bg-[#fdf6e3] text-amber-900 p-8 flex flex-col items-center">
-                <header className="max-w-4xl w-full mb-12 text-center">
+                <header className="max-w-4xl w-full mb-12 text-center relative">
+                    <a href="/" className="absolute left-0 top-1/2 -translate-y-1/2 flex items-center gap-2 px-4 py-2 bg-white rounded-lg border border-amber-200 text-amber-700 hover:bg-amber-50 hover:border-amber-300 transition-colors text-sm font-bold shadow-sm">
+                        ← 홈으로
+                    </a>
                     <h1 className="text-4xl font-bold mb-4">{data.title}</h1>
                     <p className="text-amber-800/60">시리즈 메타데이터</p>
                 </header>
